@@ -15,6 +15,8 @@ namespace Framework.ECS.Components
 		public float targetY;
 
 		public bool traveling = false;
+		public float traveled;
+		public float initDistance;
 
 		public float speed = 1;
 		public float vx, vy;
@@ -30,9 +32,9 @@ namespace Framework.ECS.Components
 				targetY = y;
 
 				vx = targetX - tc.X; vy = targetY - tc.Y;
-				float lenght = (float)Math.Sqrt(vx * vx + vy * vy);
-				vx_n = vx / lenght;
-				vy_n = vy / lenght;
+				initDistance = (float)Math.Sqrt(vx * vx + vy * vy);
+				vx_n = vx / initDistance;
+				vy_n = vy / initDistance;
 
 				traveling = true;
 			}
@@ -43,6 +45,8 @@ namespace Framework.ECS.Components
         {
 			if (traveling){
 				tc.Move(vx_n * speed, vy_n * speed);
+				traveled += 1 * speed;
+				if (traveled >= initDistance) traveling = false;
             }
         }
 
