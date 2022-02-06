@@ -1,6 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Collections.Generic;
+
+using Framework.ECS.Components;
 
 namespace Framework.ECS
 {
@@ -29,6 +32,26 @@ namespace Framework.ECS
 
 			entityIdCounter += 1;
 			return entityIdCounter - 1;
+		}
+
+		public static uint LoadEntity(string pathName)
+		{
+			uint entity = CreateEntity();
+
+			StreamReader reader = new StreamReader(pathName);
+            while (!reader.EndOfStream)
+            {
+				string line = reader.ReadLine();
+				string[] parts = line.Split(" ");
+
+				Type compType = typeof(Base).Assembly.GetType($"Framework.ECS.Components.{parts[0]}");
+				if (compType != null){
+					AddComponent(entity, (Base)Activator.CreateInstance(compType));
+				}
+			}
+			reader.Close();
+
+			return entity; 
 		}
 
 		/// <summary>
