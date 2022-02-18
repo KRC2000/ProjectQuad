@@ -1,4 +1,0 @@
-Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"/home/krs/Documents/MonogameProj1/MonogameProj1/Content/cell.png","/home/krs/Documents/MonogameProj1/MonogameProj1/Content/bin/DesktopGL/Content/cell.xnb","TextureProcessor","Texture2DContent",600,4181,0.1221373
-"/home/krs/Documents/MonogameProj1/MonogameProj1/Content/Font1.spritefont","/home/krs/Documents/MonogameProj1/MonogameProj1/Content/bin/DesktopGL/Content/Font1.xnb","FontDescriptionProcessor","SpriteFontContent",2015,21538,0.0770241
-"/home/krs/Documents/MonogameProj1/MonogameProj1/Content/pl.png","/home/krs/Documents/MonogameProj1/MonogameProj1/Content/bin/DesktopGL/Content/pl.xnb","TextureProcessor","Texture2DContent",5990,4181,0.0006704
