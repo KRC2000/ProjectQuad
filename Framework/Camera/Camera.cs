@@ -1,16 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Framework
+namespace Framework.Camera
 {
 	class Camera
 	{
-		private float scale = 1;
-		private float rotation = 0;
-
+		public float Scale { get; private set; } = 1;
+		public float Rotation { get; private set; } = 0;
 		public Vector2 Position { get; private set; }
+
+		public float MovementSpeed { get; set; } = 1;
+
+		public Camera()
+		{
+		}
+
+		public void Update(KeyboardState kbState)
+		{
+			if (kbState.IsKeyDown(Keys.Left)) Move(-MovementSpeed, 0);
+            if (kbState.IsKeyDown(Keys.Right)) Move(MovementSpeed, 0);
+            if (kbState.IsKeyDown(Keys.Up)) Move(0, -MovementSpeed);
+            if (kbState.IsKeyDown(Keys.Down)) Move(0, MovementSpeed);
+		}
 
 		/// <summary>
 		///Matrix o = Matrix.CreateTranslation(GetCenter(viewport).X - Position.X, GetCenter(viewport).Y - Position.Y, 0);<br></br>
@@ -23,8 +38,8 @@ namespace Framework
 		/// <returns></returns>
 		public Matrix GetTransform(Viewport viewport) => Matrix.CreateTranslation(-Position.X, -Position.Y, 0)
 				* (Matrix.Invert(Matrix.CreateTranslation(GetCenter(viewport).X - Position.X, GetCenter(viewport).Y - Position.Y, 0))
-				* Matrix.CreateRotationZ(-rotation * ((float)Math.PI / 180f)) * Matrix.CreateTranslation(GetCenter(viewport).X - Position.X, GetCenter(viewport).Y - Position.Y, 0))
-				* Matrix.CreateScale(scale);
+				* Matrix.CreateRotationZ(-Rotation * ((float)Math.PI / 180f)) * Matrix.CreateTranslation(GetCenter(viewport).X - Position.X, GetCenter(viewport).Y - Position.Y, 0))
+				* Matrix.CreateScale(Scale);
 
 		public void SetPos(Vector2 pos)
 		{
@@ -41,36 +56,36 @@ namespace Framework
 
 		public void SetZoom(float zoom)
 		{
-			scale = zoom;
+			Scale = zoom;
 		}
 		public void AddZoom(float zoom)
 		{
-			scale += zoom;
+			Scale += zoom;
 		}
 
 		public void SetRotation(float angle)
 		{
-			rotation = angle;
+			Rotation = angle;
 		}
 		public void AddRotation(float angle)
 		{
-			rotation += angle;
+			Rotation += angle;
 		}
 
 		public void SetCenter(Vector2 pos, Viewport viewport)
 		{
 			
-			SetPos(new Vector2(pos.X - viewport.Width / scale /2, pos.Y - viewport.Height / scale /2));
+			SetPos(new Vector2(pos.X - viewport.Width / Scale /2, pos.Y - viewport.Height / Scale /2));
 		}
 
 		public Vector2 GetCenter(Viewport viewport)
 		{
-			return new Vector2(Position.X + viewport.Width / scale / 2, Position.Y + viewport.Height/ scale / 2);
+			return new Vector2(Position.X + viewport.Width / Scale / 2, Position.Y + viewport.Height/ Scale / 2);
 		}
 
 		public Rectangle GetViewArea(Viewport viewport)
 		{
-			return new Rectangle((int)Position.X, (int)Position.Y, (int)(viewport.Width / scale), (int)(viewport.Height / scale));
+			return new Rectangle((int)Position.X, (int)Position.Y, (int)(viewport.Width / Scale), (int)(viewport.Height / Scale));
 		}
 	}
 }
