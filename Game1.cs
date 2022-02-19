@@ -16,7 +16,7 @@ namespace MonogameProj1
         public const uint CELLSIZE_X = 20;
         public const uint CELLSIZE_Y = 20;
 
-        Level currentLvl;
+        Level currentLvl = null;
         Camera camera;
 
         public Game1()
@@ -35,6 +35,12 @@ namespace MonogameProj1
             SetResolution(800, 600);
 
             currentLvl = new Level("Levels/Mothership.lvl");    
+
+            #if DEBUG
+                Level.PrintDrawCalls = true;
+            #else
+                Level.PrintDrawCalls = false;
+            #endif
 
             base.Initialize();
         }

@@ -27,6 +27,12 @@ namespace MonogameProj1
         public Texture2D stamp_t = null;
         public SpriteFont font = null;
 
+        public static bool PrintDrawCalls { get; set; }
+
+        public void foo(){
+            
+        }
+
         public Level(string levelFilePath)
         {
 
@@ -66,10 +72,13 @@ namespace MonogameProj1
                 }
             }
             _spriteBatch.End();
-
-            _spriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, null, null, null, null);
-            _spriteBatch.DrawString(font, $"Level draw calls: {drawCalls}", new Vector2(), Color.White);
-            _spriteBatch.End();
+            
+            if (PrintDrawCalls)
+            {
+                _spriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, null, null, null, null);
+                _spriteBatch.DrawString(font, $"Level draw calls: {drawCalls}", new Vector2(), Color.White);
+                _spriteBatch.End();
+            }
         }
     }
 
