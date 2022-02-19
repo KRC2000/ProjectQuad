@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-using Framework;
+using Framework.Camera;
 
 namespace MonogameProj1
 {
@@ -34,7 +34,8 @@ namespace MonogameProj1
             SetFrameLimit(60);
             SetResolution(800, 600);
 
-            currentLvl = new Level("Levels/Mothership.lvl");    
+            currentLvl = new Level("Levels/Level1.lvl");    
+            camera.MovementSpeed = 10;
 
             #if DEBUG
                 Level.PrintDrawCalls = true;
@@ -59,8 +60,9 @@ namespace MonogameProj1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            CameraInputUpdate(camera);
             // TODO: Add your update logic here
+            camera.Update(Keyboard.GetState());
+
 
             base.Update(gameTime);
         }
@@ -76,14 +78,6 @@ namespace MonogameProj1
             currentLvl.Draw(_spriteBatch, camera, GraphicsDevice, camera.GetViewArea(GraphicsDevice.Viewport));
 
             base.Draw(gameTime);
-        }
-
-        private void CameraInputUpdate(Camera cam)
-        {
-            if (Keyboard.GetState().IsKeyDown(Keys.Left)) cam.Move(-CELLSIZE_X, 0);
-            if (Keyboard.GetState().IsKeyDown(Keys.Right)) cam.Move(CELLSIZE_X, 0);
-            if (Keyboard.GetState().IsKeyDown(Keys.Up)) cam.Move(0, -CELLSIZE_Y);
-            if (Keyboard.GetState().IsKeyDown(Keys.Down)) cam.Move(0, CELLSIZE_Y);
         }
 
         protected void SetFrameLimit(int targetFps)

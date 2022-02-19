@@ -8,7 +8,7 @@ using System.Text.Json.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Framework;
+using Framework.Camera;
 
 namespace MonogameProj1
 {
