@@ -11,6 +11,8 @@ namespace Framework.Camera
 	{
 		public float Scale { get; private set; } = 1;
 		public float Rotation { get; private set; } = 0;
+
+		/// <summary> Upper left corner position of camera, becomes a center after "origin" matrix applyed</summary>
 		public Vector2 Position { get; private set; }
 
 		public float MovementSpeed { get; set; } = 1;
@@ -25,6 +27,10 @@ namespace Framework.Camera
             if (kbState.IsKeyDown(Keys.Right)) Move(MovementSpeed, 0);
             if (kbState.IsKeyDown(Keys.Up)) Move(0, -MovementSpeed);
             if (kbState.IsKeyDown(Keys.Down)) Move(0, MovementSpeed);
+            if (kbState.IsKeyDown(Keys.PageUp)) AddZoom(0.01f);
+            if (kbState.IsKeyDown(Keys.PageDown)) AddZoom(-0.01f);
+			if (kbState.IsKeyDown(Keys.Home)) AddRotation(0.1f);
+            if (kbState.IsKeyDown(Keys.End)) AddRotation(-0.1f);
 		}
 
 		/// <summary>
@@ -32,15 +38,14 @@ namespace Framework.Camera
 		///Matrix t = Matrix.CreateTranslation(-Position.X, -Position.Y, 0);<br></br>
 		///Matrix s = Matrix.CreateScale(scale);<br></br>
 		///Matrix r = Matrix.CreateRotationZ(-rotation * ((float)Math.PI / 180f));<br></br>
-		///return t* (Matrix.Invert(o)* r * o) * s;
+		///return t * r * o * s;
 		/// </summary>
 		/// <param name="viewport"></param>
 		/// <returns></returns>
 		public Matrix GetTransform(Viewport viewport) => Matrix.CreateTranslation(-Position.X, -Position.Y, 0)
-				* (Matrix.Invert(Matrix.CreateTranslation(GetCenter(viewport).X - Position.X, GetCenter(viewport).Y - Position.Y, 0))
-				* Matrix.CreateRotationZ(-Rotation * ((float)Math.PI / 180f)) * Matrix.CreateTranslation(GetCenter(viewport).X - Position.X, GetCenter(viewport).Y - Position.Y, 0))
+				* Matrix.CreateRotationZ(-Rotation * ((float)Math.PI / 180f)) 
+				* Matrix.CreateTranslation(GetCenter(viewport).X - Position.X, GetCenter(viewport).Y - Position.Y, 0)
 				* Matrix.CreateScale(Scale);
-
 		public void SetPos(Vector2 pos)
 		{
 			Position = pos;
