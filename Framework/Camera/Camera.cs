@@ -12,7 +12,7 @@ namespace Framework.Camera
 		public float Scale { get; private set; } = 1;
 		public float Rotation { get; private set; } = 0;
 
-		/// <summary> Upper left corner position of camera, becomes a center after "origin" matrix applyed</summary>
+		/// <summary> Center position of camera, becomes a center after "origin" matrix applyed</summary>
 		public Vector2 Position { get; private set; }
 
 		public float MovementSpeed { get; set; } = 1;
@@ -44,7 +44,7 @@ namespace Framework.Camera
 		/// <returns></returns>
 		public Matrix GetTransform(Viewport viewport) => Matrix.CreateTranslation(-Position.X, -Position.Y, 0)
 				* Matrix.CreateRotationZ(-Rotation * ((float)Math.PI / 180f)) 
-				* Matrix.CreateTranslation(GetCenter(viewport).X - Position.X, GetCenter(viewport).Y - Position.Y, 0)
+				* Matrix.CreateTranslation(viewport.Width / Scale / 2, viewport.Height / Scale / 2, 0)
 				* Matrix.CreateScale(Scale);
 		public void SetPos(Vector2 pos)
 		{
@@ -77,20 +77,11 @@ namespace Framework.Camera
 			Rotation += angle;
 		}
 
-		public void SetCenter(Vector2 pos, Viewport viewport)
-		{
-			
-			SetPos(new Vector2(pos.X - viewport.Width / Scale /2, pos.Y - viewport.Height / Scale /2));
-		}
-
-		public Vector2 GetCenter(Viewport viewport)
-		{
-			return new Vector2(Position.X + viewport.Width / Scale / 2, Position.Y + viewport.Height/ Scale / 2);
-		}
-
 		public Rectangle GetViewArea(Viewport viewport)
 		{
-			return new Rectangle((int)Position.X, (int)Position.Y, (int)(viewport.Width / Scale), (int)(viewport.Height / Scale));
+			return new Rectangle((int)(Position.X - (viewport.Width / Scale / 2)), 
+								(int)(Position.Y - (viewport.Height / Scale / 2)), 
+								(int)(viewport.Width / Scale), (int)(viewport.Height / Scale));
 		}
 	}
 }
