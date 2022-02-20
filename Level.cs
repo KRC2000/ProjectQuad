@@ -49,8 +49,11 @@ namespace MonogameProj1
                     Vector2 pos = new Vector2(x * Game1.CELLSIZE_X, y * Game1.CELLSIZE_Y);
                     if (viewarea.Contains(pos))
                     {
-                        if (LevelFile.Map[y * LevelFile.SizeX + x] == 1) _spriteBatch.Draw(stamp_t, new Rectangle((int)pos.X, (int)pos.Y, (int)Game1.CELLSIZE_X, (int)Game1.CELLSIZE_Y), Color.White);
-                        drawCallsCounter++;
+                        if (LevelFile.Map[y * LevelFile.SizeX + x] == 1) 
+                        {
+                            _spriteBatch.Draw(stamp_t, new Rectangle((int)pos.X, (int)pos.Y, (int)Game1.CELLSIZE_X, (int)Game1.CELLSIZE_Y), Color.White);
+                            drawCallsCounter++;
+                        }
                     }
                 }
             }
