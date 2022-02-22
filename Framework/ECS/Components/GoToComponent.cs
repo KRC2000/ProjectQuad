@@ -21,6 +21,9 @@ namespace Framework.ECS.Components
 
 		public float Speed { get; set; } = 1;
 
+		///<summary>If already traveling will ingnore Go() or GoTo() when "true"</summary>
+		public bool Locked { get; set; } = false;
+
 		public TransformComponent transform_comp {get => tc; private set => tc = value;}
 
 		// Private var's:
@@ -42,28 +45,52 @@ namespace Framework.ECS.Components
 		/// </summary>
 		public void GoTo(float x, float y)
 		{
-			if (Owner.TryGetComponent<TransformComponent>(out tc) ||
-				tc != null)
+			if ((Locked && !isTraveling) || !Locked)
 			{
-				targetX = x;
-				targetY = y;
+                if (tc != null ||
+                    Owner.TryGetComponent<TransformComponent>(out tc))
+                {
+                    targetX = x;
+                    targetY = y;
 
-				vx = targetX - tc.X; vy = targetY - tc.Y;
-				InitDistance = (float)Math.Sqrt(vx * vx + vy * vy);
-				vx_n = vx / InitDistance;
-				vy_n = vy / InitDistance;
+                    vx = targetX - tc.X; vy = targetY - tc.Y;
+                    InitDistance = (float)Math.Sqrt(vx * vx + vy * vy);
+                    vx_n = vx / InitDistance;
+                    vy_n = vy / InitDistance;
 
-				isTraveling = true;
+                    isTraveling = true;
+                }
+                else throw new Exception($"Entity does not has required component for system correct execution. Missing component - {typeof(TransformComponent)}");
 			}
-			else throw new Exception($"Entity does not has required component for system correct execution. Missing component - {typeof(TransformComponent)}");
-		}
+        }
+
+        public void Go(float x, float y)
+        {
+			if ((Locked && !isTraveling) || !Locked)
+			{
+                if (tc != null ||
+                    Owner.TryGetComponent<TransformComponent>(out tc))
+                {
+                    targetX = tc.X + x;
+                    targetY = tc.Y + y;
+
+                    vx = targetX - tc.X; vy = targetY - tc.Y;
+                    InitDistance = (float)Math.Sqrt(vx * vx + vy * vy);
+                    vx_n = vx / InitDistance;
+                    vy_n = vy / InitDistance;
+
+                    isTraveling = true;
+                }
+                else throw new Exception($"Entity does not has required component for system correct execution. Missing component - {typeof(TransformComponent)}");
+			}
+        }
 
         public void Update()
         {
 			if (isTraveling){
 				tc.Move(vx_n * Speed, vy_n * Speed);
 				Traveled += 1 * Speed;
-				if (Traveled >= InitDistance) isTraveling = false;
+				if (Traveled >= InitDistance) { isTraveling = false; Traveled = 0;}
             }
         }
 
