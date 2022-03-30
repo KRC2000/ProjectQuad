@@ -39,7 +39,7 @@ namespace MonogameProj1
             SetFrameLimit(60);
             SetResolution(800, 600);
 
-            currentLvl = new Level("Levels/Level1.lvl");    
+            currentLvl = new Level("Levels/map1.tmx");    
             camera.MovementSpeed = 10;
 
             // Constructing player entity according to the instruction file
@@ -48,9 +48,7 @@ namespace MonogameProj1
             Manager.GetComponent<GoToComponent>(player).GoTo(300, 100);
 
             #if DEBUG
-                Level.PrintDrawCalls = true;
             #else
-                Level.PrintDrawCalls = false;
             #endif
 
             base.Initialize();
