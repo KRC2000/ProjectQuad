@@ -4,6 +4,8 @@ using System.Text;
 
 using Framework;
 
+using Microsoft.Xna.Framework;
+
 namespace Framework.ECS.Components
 {
 	/// <summary>
@@ -24,18 +26,13 @@ namespace Framework.ECS.Components
 		///<summary>If already traveling will ingnore Go() or GoTo() when "true"</summary>
 		public bool Locked { get; set; } = false;
 
-		public TransformComponent transform_comp {get => tc; private set => tc = value;}
-
-		// Private var's:
-
-		private float targetX;
-		private float targetY;
+		public Vector2 Target { get; private set; }
 
 		/// <summary>Start to finish vector</summary>
-		private float vx, vy;
+		public Vector2 v;
 
 		/// <summary>Start to finish vector normalised</summary>
-		private float vx_n, vy_n;
+		public Vector2 v_n;
 		
 		private TransformComponent tc = null; 
 		
@@ -43,46 +40,20 @@ namespace Framework.ECS.Components
 		/// Sets order to move transform component of the owner to the passed coordinate<br></br>
 		/// Update() should be called in cycle to work
 		/// </summary>
-		public void GoTo(float x, float y)
+		public void GoTo(Vector2 pos)
 		{
 			if ((Locked && !isTraveling) || !Locked)
 			{
                 if (tc != null ||
                     Owner.TryGetComponent<TransformComponent>(out tc))
                 {
-                    targetX = x;
-                    targetY = y;
+                    Target = pos;
 
-                    vx = targetX - tc.X; vy = targetY - tc.Y;
-                    InitDistance = (float)Math.Sqrt(vx * vx + vy * vy);
-                    vx_n = vx / InitDistance;
-                    vy_n = vy / InitDistance;
+                    v = Target - tc.Pos;
+                    InitDistance = (float)Math.Sqrt(v.X * v.X + v.Y * v.Y);
+					v_n = v / InitDistance;
 
 					Traveled = 0;
-                    isTraveling = true;
-                }
-                else throw new Exception($"Entity does not has required component for system correct execution. Missing component - {typeof(TransformComponent)}");
-			}
-        }
-		/// <summary>
-		/// Sets order to move transform component of the owner to the passed position that is relative to the current position.<br></br>
-		/// Same as GoTo() but sets target point relative to the current position.
-		/// </summary>
-        public void Go(float x, float y)
-        {
-			if ((Locked && !isTraveling) || !Locked)
-			{
-                if (tc != null ||
-                    Owner.TryGetComponent<TransformComponent>(out tc))
-                {
-                    targetX = tc.X + x;
-                    targetY = tc.Y + y;
-
-                    vx = targetX - tc.X; vy = targetY - tc.Y;
-                    InitDistance = (float)Math.Sqrt(vx * vx + vy * vy);
-                    vx_n = vx / InitDistance;
-                    vy_n = vy / InitDistance;
-
                     isTraveling = true;
                 }
                 else throw new Exception($"Entity does not has required component for system correct execution. Missing component - {typeof(TransformComponent)}");
@@ -92,9 +63,13 @@ namespace Framework.ECS.Components
         public void Update()
         {
 			if (isTraveling){
-				tc.Move(vx_n * Speed, vy_n * Speed);
+				tc.Move(v_n * Speed);
 				Traveled += Speed;
-				if (Traveled >= InitDistance) { isTraveling = false; Traveled = 0;}
+				if (Traveled >= InitDistance) { 
+					tc.SetPos(Target);
+					isTraveling = false; 
+					Traveled = 0;
+				}
             }
         }
 
