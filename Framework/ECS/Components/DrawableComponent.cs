@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Framework.ECS.Components
 {
-    internal class DrawableComponent: Base
+    class DrawableComponent: Base
     {
 		public Texture2D texture;
 		public TransformComponent tc = null;

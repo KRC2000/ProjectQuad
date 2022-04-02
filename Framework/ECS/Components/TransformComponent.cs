@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace Framework.ECS.Components
 {
-    internal class TransformComponent: Base
+    class TransformComponent: Base
     {
         public Vector2 Pos { get; private set; }
 

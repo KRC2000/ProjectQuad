@@ -11,7 +11,7 @@ namespace Framework.ECS.Components
 	/// <summary>
 	/// Only for limited fps
 	/// </summary>
-    internal class GoToComponent: Base, IUpdatable
+    class GoToComponent: Base, IUpdatable
     {
 		public bool isTraveling { get; private set; } = false;
 
