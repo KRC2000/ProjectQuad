@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Framework.Camera;
 
-namespace MonogameProj1
+namespace ProjectQuad
 {
     class Level
     {
@@ -76,6 +76,11 @@ namespace MonogameProj1
 
             _spriteBatch.End();
             DrawCalls = drawCallsCounter;
+        }
+
+        public bool IsPassable(Point tilePos){
+            if (LevelFile.Layers[0].Data[tilePos.X, tilePos.Y] == 0) return true;
+            else return false;
         }
     }
 
