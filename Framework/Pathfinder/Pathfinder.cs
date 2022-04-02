@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 
+using Microsoft.Xna.Framework;
+
 namespace Framework.Pathfinder
 {
     /// <summary>
@@ -28,8 +30,8 @@ namespace Framework.Pathfinder
         public PathMode Mode { get; set; } = PathMode.Free;
         private List<Node> nodes;
         private List<Node> openedNodes;
-        private Vector2i mapSize;
-        private Vector2i startPos, finishPos;
+        private Point mapSize;
+        private Point startPos, finishPos;
 
         ///<summary> Creates node grid that is used to calculate paths for passed map </summary>
         ///<param name="map"> 2d array map where 0 - empty "walkable" space, any other positive number - obstacle</param>
@@ -43,7 +45,7 @@ namespace Framework.Pathfinder
         ///<summary>Calculates path. Use after Init() call.</summary>
         ///<returns>true - if path was found, false otherwise</returns>
         ///<param name="path">Path list to be filled with solving positions</param>
-        public bool GetPath(out List<Vector2i> path, in Vector2i startNodePos, in Vector2i finishNodePos)
+        public bool GetPath(out List<Point> path, Point startNodePos, Point finishNodePos)
         {
             if (GetNodeAt(startNodePos) == null || GetNodeAt(finishNodePos) == null)
                 throw new Exception("Start/Finish position is out of map bounds or this position is occupied by obstacle.");
@@ -81,9 +83,9 @@ namespace Framework.Pathfinder
         /// </summary>
         /// <param name="pathList"> List to be filled with path solving positions </param>
         /// <param name="currentNode"> Finish node that has been discovered through path finding </param>
-        private void FillPath(out List<Vector2i> pathList, Node currentNode)
+        private void FillPath(out List<Point> pathList, Node currentNode)
         {
-            pathList = new List<Vector2i>();
+            pathList = new List<Point>();
             pathList.Add(currentNode.pos);
             while (currentNode.parent != null)
             {
@@ -160,7 +162,7 @@ namespace Framework.Pathfinder
                 {
                     if (map[y,x] == 0)
                     {
-                        Node n = new Node(){pos=new Vector2i(x, y)};
+                        Node n = new Node(){pos=new Point(x, y)};
                         nodes.Add(n);
                     }
                 }
@@ -212,7 +214,7 @@ namespace Framework.Pathfinder
         /// </summary>
         /// <param name="pos"> Position of needed node </param>
         /// <returns> Node with passed position, null if none found. </returns>
-        public Node GetNodeAt(Vector2i pos)
+        public Node GetNodeAt(Point pos)
         {
             foreach (var node in nodes)
             {

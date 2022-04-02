@@ -1,4 +1,7 @@
 using System;
+
+using Microsoft.Xna.Framework;
+
 namespace Framework.Pathfinder
 {
     public enum NodeState
@@ -8,13 +11,13 @@ namespace Framework.Pathfinder
     class Node
     {
         public Node parent = null;
-        public Vector2i pos;
+        public Point pos;
         public NodeState state = NodeState.Idle; 
         public float g; // Distance to the start node through all parents
         public float h; // Distance to the finish node
         public float f; // g + h  
 
-        public void RecalculateValues(Vector2i finPos)
+        public void RecalculateValues(Point finPos)
         {
             Recalculate_g();
             Recalculate_h(finPos);
@@ -39,9 +42,9 @@ namespace Framework.Pathfinder
             else g = parent.g + 1.4142f;
         }
 
-        private void Recalculate_h(Vector2i finPos)
+        private void Recalculate_h(Point finPos)
         {
-            Vector2i toFinishVec = finPos - pos; 
+            Point toFinishVec = finPos - pos; 
             h = (float)Math.Sqrt(toFinishVec.X * toFinishVec.X + toFinishVec.Y * toFinishVec.Y);
         }
 
