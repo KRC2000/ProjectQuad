@@ -7,6 +7,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Framework.ECS.Components
 {
+	/// <summary>
+    /// Recomends:<br></br>
+    /// Framework.ECS.Components.TransformComponent;<br></br>
+    /// </summary>
     class DrawableComponent: Base
     {
 		public Texture2D texture;

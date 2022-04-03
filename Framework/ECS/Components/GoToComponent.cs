@@ -9,8 +9,10 @@ using Microsoft.Xna.Framework;
 namespace Framework.ECS.Components
 {
 	/// <summary>
+    /// Requires:<br></br>
+    /// Framework.ECS.Components.TransformComponent;<br></br>
 	/// Only for limited fps
-	/// </summary>
+    /// </summary>
     class GoToComponent: Base, IUpdatable
     {
 		public bool isTraveling { get; private set; } = false;
