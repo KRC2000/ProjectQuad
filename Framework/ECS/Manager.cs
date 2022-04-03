@@ -9,10 +9,19 @@ namespace Framework.ECS
 {
 	static class Manager
 	{
+		private static List<string> componentNamespaces = new List<string>(){"Framework.ECS.Components"};
 		private static Dictionary<uint, Entity> entities = new Dictionary<uint, Entity>();
 
 		private static uint entityIdCounter = 0;
 
+		/// <summary>
+		/// Manger can only work with components that he knows of. The only namespace included by default is "Framework.ECS.Components".
+		/// Add you'r own namespaces with components using this method
+		/// </summary>
+		public static void IncludeComponentNamespace(string namespace_)
+		{
+			componentNamespaces.Add(namespace_);
+		}
 		public static List<uint> GetAllIds()
 		{
 			List<uint> Ids = new List<uint>();
@@ -44,9 +53,22 @@ namespace Framework.ECS
 				string line = reader.ReadLine();
 				string[] parts = line.Split(" ");
 
-				Type compType = typeof(Base).Assembly.GetType($"Framework.ECS.Components.{parts[0]}");
+
+				Type compType = null;
+				foreach (var namespace_ in componentNamespaces)
+				{
+					compType = typeof(Base).Assembly.GetType($"{namespace_}.{parts[0]}");
+					if (compType != null) break;
+				}
+
+				//Type compType = typeof(Base).Assembly.GetType($"{componentNamespaces[0]}.{parts[0]}");
+				//if (compType == null)
 				if (compType != null){
 					AddComponent(entity, (Base)Activator.CreateInstance(compType));
+				}
+				else
+				{
+					throw new Exception($"Framework.ECS.Manager:LoadEntity: Unknown component - {parts[0]}. Unable to build entity from file {pathName}. ");
 				}
 			}
 			reader.Close();
