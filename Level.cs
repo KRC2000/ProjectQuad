@@ -13,7 +13,7 @@ namespace ProjectQuad
 {
     class Level
     {
-        private LevelFile_xml LevelFile { get; set; }
+        public LevelFile_xml LevelFile { get; set; }
 
         public Texture2D stamp_t = null;
         public SpriteFont font = null;
@@ -38,7 +38,8 @@ namespace ProjectQuad
                 rows.RemoveAt(0);
                 rows.RemoveAt(rows.Count-1);
                 
-                layer.Data = new int[layer.Width, layer.Height];
+                //layer.Data = new uint[layer.Width, layer.Height];
+                layer.Data = new uint[layer.Height, layer.Width];
                 for (int i = 0; i < rows.Count; i++)
                 {
                     List<string> row = new List<string>();
@@ -47,7 +48,8 @@ namespace ProjectQuad
                     
                     for (int j = 0; j < row.Count; j++)
                     {
-                        layer.Data[j,i] = int.Parse(row[j]);
+                        //layer.Data[j,i] = uint.Parse(row[j]);
+                        layer.Data[i,j] = uint.Parse(row[j]);
                     }
                 }
             }         
@@ -58,11 +60,11 @@ namespace ProjectQuad
             _spriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, null, null, null, camera.GetTransform(device.Viewport));
             uint drawCallsCounter = 0;
 
-            for (int y = 0; y < LevelFile.Layers[0].Height; y++)
+            for (int y = 0; y < LevelFile.Layers[0].Width; y++)
             {
-                for (int x = 0; x < LevelFile.Layers[0].Width; x++)
+                for (int x = 0; x < LevelFile.Layers[0].Height; x++)
                 {
-                    Vector2 pos = new Vector2(x * Game1.CELLSIZE_X, y * Game1.CELLSIZE_Y);
+                    Vector2 pos = new Vector2(y * Game1.CELLSIZE_X, x * Game1.CELLSIZE_Y);
                     if (viewarea.Contains(pos))
                     {
                         if (LevelFile.Layers[0].Data[x, y] != 0) 
@@ -79,7 +81,7 @@ namespace ProjectQuad
         }
 
         public bool IsPassable(Point tilePos){
-            if (LevelFile.Layers[0].Data[tilePos.X, tilePos.Y] == 0) return true;
+            if (LevelFile.Layers[0].Data[tilePos.Y, tilePos.X] == 0) return true;
             else return false;
         }
     }
@@ -108,7 +110,7 @@ namespace ProjectQuad
         [XmlElement("data")]
         public string Data_str { get; set; }
         [XmlIgnore]
-        public int[,] Data { get; set; }
+        public uint[,] Data { get; set; }
     }
     public class Tileset_xml
     {
