@@ -7,15 +7,18 @@ using Microsoft.Xna.Framework.Input;
 using Framework.Camera;
 using Framework.ECS;
 using Framework.ECS.Components;
+using Framework.DebugUI;
 
-namespace MonogameProj1
+using ProjectQuad.Framework.Components;
+
+namespace ProjectQuad
 {
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        public const uint CELLSIZE_X = 20;
+        public const uint CELLSIZE_X = 30;
         public const uint CELLSIZE_Y = 20;
 
         Level currentLvl = null;
@@ -23,6 +26,9 @@ namespace MonogameProj1
 
 
         uint player;
+
+
+        private Vector2 MouseWorldPos { get; set; }
 
         public Game1()
         {
@@ -39,13 +45,17 @@ namespace MonogameProj1
             SetFrameLimit(60);
             SetResolution(800, 600);
 
+            Manager.IncludeComponentNamespace("ProjectQuad.Framework.Components");
+
             currentLvl = new Level("Levels/map1.tmx");    
             camera.MovementSpeed = 10;
 
             // Constructing player entity according to the instruction file
             player = Manager.LoadEntity("Entities/Player.ent");
 
-            Manager.GetComponent<GoToComponent>(player).GoTo(300, 100);
+            Manager.GetComponent<GoToComponent>(player).Locked = true;
+            Manager.GetComponent<TravelComponent>(player).TravelTo(new Point(10, 14), currentLvl, true);
+            Manager.GetComponent<TravelComponent>(player).TravelTo(new Point(4, 2), currentLvl, true);
 
             #if DEBUG
             #else
@@ -60,9 +70,12 @@ namespace MonogameProj1
 
             // TODO: use this.Content to load your game content here
 
+            // Load font for debug ui
+            DebugUI.Font = Content.Load<SpriteFont>("Font1");
+
             // Load and set level textures
             currentLvl.stamp_t =  Content.Load<Texture2D>("cell");
-            currentLvl.font =  Content.Load<SpriteFont>("Font1");
+            currentLvl.font = Content.Load<SpriteFont>("Font1");
 
             // Load and set player's drawable component's texture
             Manager.GetComponent<DrawableComponent>(player).texture = Content.Load<Texture2D>("pl");
@@ -74,19 +87,18 @@ namespace MonogameProj1
                 Exit();
 
             // TODO: Add your update logic here
+
             camera.Update(Keyboard.GetState());
 
             Manager.GetComponent<GoToComponent>(player).Update();
 
             // Get world mouse position
-            Vector2 mouseWorldPos = Vector2.Transform(new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y),
+            MouseWorldPos = Vector2.Transform(new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y),
                                                         Matrix.Invert(camera.GetTransform(GraphicsDevice.Viewport)));
 
-            // Make player entity move to the mouse position using GoToComponent
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-                Manager.GetComponent<GoToComponent>(player).GoTo(mouseWorldPos.X, mouseWorldPos.Y);
-            
 
+            PlayerControl();            
+            
             base.Update(gameTime);
         }
 
@@ -102,10 +114,29 @@ namespace MonogameProj1
 
             // Draw player entity
             _spriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, null, null, null, camera.GetTransform(GraphicsDevice.Viewport));
-            Manager.GetComponent<DrawableComponent>(player).Draw(_spriteBatch);
+            Manager.GetComponent<DrawableComponent>(player).Draw(_spriteBatch, new Vector2(CELLSIZE_X, CELLSIZE_Y));
             _spriteBatch.End();
 
+            DebugUI.DrawDebug<float>(_spriteBatch, "Init dist: ", Manager.GetComponent<GoToComponent>(player).InitDistance, 0);
+            DebugUI.DrawDebug<float>(_spriteBatch, "Traveled: ", Manager.GetComponent<GoToComponent>(player).Traveled, 1);
             base.Draw(gameTime);
+        }
+        
+        private void PlayerControl()
+        {
+            TravelComponent trav_c = Manager.GetComponent<TravelComponent>(player);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.W))
+                trav_c.TravelOneStep(TravelComponent.Direction.N, currentLvl);
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+                trav_c.TravelOneStep(TravelComponent.Direction.W, currentLvl);
+            if (Keyboard.GetState().IsKeyDown(Keys.S))
+                trav_c.TravelOneStep(TravelComponent.Direction.S, currentLvl);
+            if (Keyboard.GetState().IsKeyDown(Keys.D))
+                trav_c.TravelOneStep(TravelComponent.Direction.E, currentLvl);
+
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                trav_c.TravelTo(new Point(0,0), currentLvl, false);
         }
 
         protected void SetFrameLimit(int targetFps)

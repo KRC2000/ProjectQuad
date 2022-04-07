@@ -28,6 +28,8 @@ namespace Framework.Pathfinder
     class Pathfinder
     {
         public PathMode Mode { get; set; } = PathMode.Free;
+        public bool Initialised { get; private set; } = false;
+        public string Tag { get; private set; } = null;
         private List<Node> nodes;
         private List<Node> openedNodes;
         private Point mapSize;
@@ -35,11 +37,13 @@ namespace Framework.Pathfinder
 
         ///<summary> Creates node grid that is used to calculate paths for passed map </summary>
         ///<param name="map"> 2d array map where 0 - empty "walkable" space, any other positive number - obstacle</param>
-        public void Init(in uint[,] map)
+        public void Init(in uint[,] map, string mapTag)
         {
             mapSize.X = map.GetLength(1);
             mapSize.Y = map.GetLength(0);
             GenNodes(map);
+            Initialised = true;
+            Tag = mapTag;
         }
 
         ///<summary>Calculates path. Use after Init() call.</summary>

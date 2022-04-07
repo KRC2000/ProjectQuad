@@ -1,3 +1,4 @@
 DrawableComponent
 TransformComponent 200 200
 GoToComponent
+TravelComponent
