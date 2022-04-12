@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using Framework;
 using Framework.Camera;
 using Framework.ECS;
 using Framework.ECS.Components;
@@ -19,7 +20,7 @@ namespace ProjectQuad
         private SpriteBatch _spriteBatch;
 
         public const uint CELLSIZE_X = 30;
-        public const uint CELLSIZE_Y = 20;
+        public const uint CELLSIZE_Y = 30;
 
         Level currentLvl = null;
         Camera camera;
@@ -29,6 +30,7 @@ namespace ProjectQuad
 
 
         private Vector2 MouseWorldPos { get; set; }
+        private Point MouseWorldTilePos { get; set; }
 
         public Game1()
         {
@@ -42,12 +44,13 @@ namespace ProjectQuad
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            //SetFrameLimit(0);
             SetFrameLimit(60);
             SetResolution(800, 600);
 
             Manager.IncludeComponentNamespace("ProjectQuad.Framework.Components");
 
-            currentLvl = new Level("Levels/map1.tmx");    
+            currentLvl = new Level("Levels/map1.tmx", "defaultLevel");    
             camera.MovementSpeed = 10;
 
             // Constructing player entity according to the instruction file
@@ -96,9 +99,14 @@ namespace ProjectQuad
             MouseWorldPos = Vector2.Transform(new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y),
                                                         Matrix.Invert(camera.GetTransform(GraphicsDevice.Viewport)));
 
+            MouseWorldTilePos = new Point((int)(MouseWorldPos.X / CELLSIZE_X), (int)(MouseWorldPos.Y / CELLSIZE_Y));
+
+            if (InputManager.GetState(Keys.M) == InputState.JustPressed) Console.WriteLine("v");
 
             PlayerControl();            
-            
+
+
+            InputManager.Update(Keyboard.GetState(), Mouse.GetState());
             base.Update(gameTime);
         }
 
@@ -119,6 +127,7 @@ namespace ProjectQuad
 
             DebugUI.DrawDebug<float>(_spriteBatch, "Init dist: ", Manager.GetComponent<GoToComponent>(player).InitDistance, 0);
             DebugUI.DrawDebug<float>(_spriteBatch, "Traveled: ", Manager.GetComponent<GoToComponent>(player).Traveled, 1);
+            DebugUI.DrawDebug<TimeSpan>(_spriteBatch, "Game time: ", gameTime.ElapsedGameTime.Duration(), 2);
             base.Draw(gameTime);
         }
         
@@ -134,9 +143,9 @@ namespace ProjectQuad
                 trav_c.TravelOneStep(TravelComponent.Direction.S, currentLvl);
             if (Keyboard.GetState().IsKeyDown(Keys.D))
                 trav_c.TravelOneStep(TravelComponent.Direction.E, currentLvl);
-
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-                trav_c.TravelTo(new Point(0,0), currentLvl, false);
+            
+            if (InputManager.GetState(MouseButtons.Left) == InputState.JustPressed) 
+                trav_c.TravelTo(MouseWorldTilePos, currentLvl, false);
         }
 
         protected void SetFrameLimit(int targetFps)

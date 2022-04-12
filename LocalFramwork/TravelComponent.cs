@@ -55,6 +55,13 @@ namespace ProjectQuad.Framework.Components
                 }
         }
         
+        /// <summary>
+        /// Depending on the passed bool queue variable, either makes entity travel to the cellPos, or queues such travel in the end of the already queued movement.
+        /// Travel path accounts level and obstacles, shortest path calculated.
+        /// </summary>
+        /// <param name="cellPos">Travel final destination</param>
+        /// <param name="currentLevel">Level that entity is traveling on</param>
+        /// <param name="queue">Should travel be queued(true) or started immediatly(false)</param>
         public void TravelTo(Point cellPos, Level currentLevel, bool queue)
         {
             VerifyRequiredComponents();
@@ -65,10 +72,10 @@ namespace ProjectQuad.Framework.Components
             }
 
             List<Point> path = null;
-            if (!finder.Initialised || finder.Tag != "map_default")
+            if (!finder.Initialised || finder.Tag != currentLevel.Name)
             {
                 path = new List<Point>();
-                finder.Init(currentLevel.LevelFile.Layers[0].Data, "map_default");
+                finder.Init(currentLevel.LevelFile.Layers[0].Data, currentLevel.Name);
             }
 
             
@@ -86,10 +93,12 @@ namespace ProjectQuad.Framework.Components
                 gtc.Queue.Clear();
             }
             
-
-            foreach (var point in path)
+            if (path != null)
             {
-                gtc.AddToQueue(new Vector2(point.X * Game1.CELLSIZE_X, point.Y * Game1.CELLSIZE_Y));
+                foreach (var point in path)
+                {
+                    gtc.AddToQueue(new Vector2(point.X * Game1.CELLSIZE_X, point.Y * Game1.CELLSIZE_Y));
+                }
             }
         }
 

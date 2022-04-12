@@ -15,12 +15,14 @@ namespace ProjectQuad
     {
         public LevelFile_xml LevelFile { get; set; }
 
+        public string Name { get; private set; } = null;
+
         public Texture2D stamp_t = null;
         public SpriteFont font = null;
 
         public uint DrawCalls { get; private set; }
 
-        public Level(string levelFilePath)
+        public Level(string levelFilePath, string levelName)
         {
             // Deserialise level xml file in to LevelFile
             using (StreamReader reader = new StreamReader(levelFilePath))
