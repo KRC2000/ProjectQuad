@@ -47,7 +47,7 @@ namespace ProjectQuad
 
             Manager.IncludeComponentNamespace("ProjectQuad.Framework.Components");
 
-            currentLvl = new Level("Levels/map1.tmx");    
+            currentLvl = new Level("Levels/map1.tmx", "map1");
             camera.MovementSpeed = 10;
 
             // Constructing player entity according to the instruction file
@@ -63,6 +63,7 @@ namespace ProjectQuad
 
             base.Initialize();
         }
+
 
         protected override void LoadContent()
         {
@@ -97,8 +98,8 @@ namespace ProjectQuad
                                                         Matrix.Invert(camera.GetTransform(GraphicsDevice.Viewport)));
 
 
-            PlayerControl();            
-            
+            PlayerControl();
+
             base.Update(gameTime);
         }
 
@@ -121,7 +122,7 @@ namespace ProjectQuad
             DebugUI.DrawDebug<float>(_spriteBatch, "Traveled: ", Manager.GetComponent<GoToComponent>(player).Traveled, 1);
             base.Draw(gameTime);
         }
-        
+
         private void PlayerControl()
         {
             TravelComponent trav_c = Manager.GetComponent<TravelComponent>(player);
@@ -167,6 +168,6 @@ namespace ProjectQuad
             _graphics.PreferredBackBufferHeight = height;
             _graphics.ApplyChanges();
         }
-    
+
     }
 }

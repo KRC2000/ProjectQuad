@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MonogameProj1
+namespace ProjectQuad
 {
     public static class Program
     {
