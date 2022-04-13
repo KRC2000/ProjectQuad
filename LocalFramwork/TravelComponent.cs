@@ -68,6 +68,7 @@ namespace ProjectQuad.Framework.Components
 
             if (finder == null) {
                 finder = new Pathfinder();
+                finder.Quiet = true;
                 finder.Mode = PathMode.Aligned;
             }
 
