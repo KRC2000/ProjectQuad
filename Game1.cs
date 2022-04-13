@@ -44,12 +44,13 @@ namespace ProjectQuad
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            //SetFrameLimit(0);
             SetFrameLimit(60);
             SetResolution(800, 600);
 
             Manager.IncludeComponentNamespace("ProjectQuad.Framework.Components");
-            
-            currentLvl = new Level("Levels/map1.tmx", "map1");
+
+            currentLvl = new Level("Levels/map1.tmx", "defaultLevel");    
             camera.MovementSpeed = 10;
 
             // Constructing player entity according to the instruction file
@@ -124,6 +125,7 @@ namespace ProjectQuad
 
             DebugUI.DrawDebug<float>(_spriteBatch, "Init dist: ", Manager.GetComponent<GoToComponent>(player).InitDistance, 0);
             DebugUI.DrawDebug<float>(_spriteBatch, "Traveled: ", Manager.GetComponent<GoToComponent>(player).Traveled, 1);
+            DebugUI.DrawDebug<TimeSpan>(_spriteBatch, "Game time: ", gameTime.ElapsedGameTime.Duration(), 2);
             base.Draw(gameTime);
         }
 
