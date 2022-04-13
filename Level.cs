@@ -59,7 +59,7 @@ namespace ProjectQuad
 
         public void Draw(SpriteBatch _spriteBatch, Camera camera, GraphicsDevice device, Rectangle viewarea)
         {
-            _spriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, null, null, null, camera.GetTransform(device.Viewport));
+            _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.GetTransform(device.Viewport));
             uint drawCallsCounter = 0;
 
             for (int y = 0; y < LevelFile.Layers[0].Width; y++)

@@ -119,7 +119,7 @@ namespace ProjectQuad
             currentLvl.Draw(_spriteBatch, camera, GraphicsDevice, camera.GetViewArea(GraphicsDevice.Viewport));
 
             // Draw player entity
-            _spriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.PointClamp, null, null, null, camera.GetTransform(GraphicsDevice.Viewport));
+            _spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.GetTransform(GraphicsDevice.Viewport));
             Manager.GetComponent<DrawableComponent>(player).Draw(_spriteBatch, new Vector2(CELLSIZE_X, CELLSIZE_Y));
             _spriteBatch.End();
 
