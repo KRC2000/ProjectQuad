@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using Framework;
 using Framework.Camera;
 using Framework.ECS;
 using Framework.ECS.Components;
@@ -19,7 +20,7 @@ namespace ProjectQuad
         private SpriteBatch _spriteBatch;
 
         public const uint CELLSIZE_X = 30;
-        public const uint CELLSIZE_Y = 20;
+        public const uint CELLSIZE_Y = 30;
 
         Level currentLvl = null;
         Camera camera;
@@ -29,6 +30,7 @@ namespace ProjectQuad
 
 
         private Vector2 MouseWorldPos { get; set; }
+        private Point MouseWorldGridPos { get; set; }
 
         public Game1()
         {
@@ -46,7 +48,7 @@ namespace ProjectQuad
             SetResolution(800, 600);
 
             Manager.IncludeComponentNamespace("ProjectQuad.Framework.Components");
-
+            
             currentLvl = new Level("Levels/map1.tmx", "map1");
             camera.MovementSpeed = 10;
 
@@ -97,9 +99,11 @@ namespace ProjectQuad
             MouseWorldPos = Vector2.Transform(new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y),
                                                         Matrix.Invert(camera.GetTransform(GraphicsDevice.Viewport)));
 
+            MouseWorldGridPos = new Point((int)(MouseWorldPos.X / CELLSIZE_X), (int)(MouseWorldPos.Y / CELLSIZE_Y));
 
             PlayerControl();
 
+            InputManager.Update(Keyboard.GetState(), Mouse.GetState());
             base.Update(gameTime);
         }
 
@@ -136,8 +140,8 @@ namespace ProjectQuad
             if (Keyboard.GetState().IsKeyDown(Keys.D))
                 trav_c.TravelOneStep(TravelComponent.Direction.E, currentLvl);
 
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
-                trav_c.TravelTo(new Point(0,0), currentLvl, false);
+            if (InputManager.GetState(MouseButtons.Left) == InputState.JustPressed)
+                trav_c.TravelTo(MouseWorldGridPos, currentLvl, false);
         }
 
         protected void SetFrameLimit(int targetFps)
