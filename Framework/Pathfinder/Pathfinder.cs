@@ -27,6 +27,7 @@ namespace Framework.Pathfinder
     
     class Pathfinder
     {
+        public bool Quiet { get; set; } = false;
         public PathMode Mode { get; set; } = PathMode.Free;
         public bool Initialised { get; private set; } = false;
         public string Tag { get; private set; } = null;
@@ -52,7 +53,10 @@ namespace Framework.Pathfinder
         public bool GetPath(out List<Point> path, Point startNodePos, Point finishNodePos)
         {
             if (GetNodeAt(startNodePos) == null || GetNodeAt(finishNodePos) == null)
-                throw new Exception("Start/Finish position is out of map bounds or this position is occupied by obstacle.");
+            {
+                if (Quiet) { path = null; return false; }
+                else throw new Exception("Start/Finish position is out of map bounds or this position is occupied by obstacle.");  
+            }
 
             startPos = startNodePos; finishPos = finishNodePos;
             ClearNodesCache();
