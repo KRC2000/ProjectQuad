@@ -18,6 +18,7 @@ namespace ProjectQuad
 
         public Dictionary<string, Tileset> Tilesets { get; private set; }
 
+        public Layer ObstacleLayer { get; private set; }
         public string Name { get; private set; } = null;
 
         private Texture2D stamp_t = null;
@@ -49,7 +50,8 @@ namespace ProjectQuad
             }
 
             // Map data can be only read as a string, so
-            // converting long ass string ("..0, 0, 0, 1, 1, 0,\n..") into 2D array that Layer objects will own
+            // converting long ass string ("..0, 0, 0, 1, 1, 0,\n..") into 2D array that Layer objects will own.
+            // Also assigning obstacle layer var
             foreach (var layer in LevelFile.Layers)
             {
                 List<string> rows = new List<string>();
@@ -57,7 +59,6 @@ namespace ProjectQuad
                 rows.RemoveAt(0);
                 rows.RemoveAt(rows.Count - 1);
 
-                //layer.Data = new uint[layer.Width, layer.Height];
                 layer.Data = new uint[layer.Height, layer.Width];
                 for (int i = 0; i < rows.Count; i++)
                 {
@@ -67,10 +68,11 @@ namespace ProjectQuad
 
                     for (int j = 0; j < row.Count; j++)
                     {
-                        //layer.Data[j,i] = uint.Parse(row[j]);
                         layer.Data[i, j] = uint.Parse(row[j]);
                     }
                 }
+
+                if (layer.Name == "Obstacles") ObstacleLayer = layer;
             }
         }
 
@@ -129,7 +131,7 @@ namespace ProjectQuad
 
         public bool IsPassable(Point tilePos)
         {
-            if (LevelFile.Layers[0].Data[tilePos.Y, tilePos.X] == 0) return true;
+            if (ObstacleLayer.Data[tilePos.Y, tilePos.X] == 0) return true;
             else return false;
         }
     }
