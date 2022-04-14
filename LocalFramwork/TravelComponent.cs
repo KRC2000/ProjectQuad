@@ -76,7 +76,7 @@ namespace ProjectQuad.Framework.Components
             if (!finder.Initialised || finder.Tag != currentLevel.Name)
             {
                 path = new List<Point>();
-                finder.Init(currentLevel.LevelFile.Layers[0].Data, currentLevel.Name);
+                finder.Init(currentLevel.ObstacleLayer.Data, currentLevel.Name);
             }
 
             
