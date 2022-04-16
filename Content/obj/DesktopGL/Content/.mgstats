@@ -1,0 +1,6 @@
+Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"/home/krs/Documents/ProjectQuad/Content/cell.png","/home/krs/Documents/ProjectQuad/Content/bin/DesktopGL/Content/cell.xnb","TextureProcessor","Texture2DContent",600,4181,0.1019367
+"/home/krs/Documents/ProjectQuad/Content/character.png","/home/krs/Documents/ProjectQuad/Content/bin/DesktopGL/Content/character.xnb","TextureProcessor","Texture2DContent",6482,4181,0.1136309
+"/home/krs/Documents/ProjectQuad/Content/Font1.spritefont","/home/krs/Documents/ProjectQuad/Content/bin/DesktopGL/Content/Font1.xnb","FontDescriptionProcessor","SpriteFontContent",2015,21538,0.0891063
+"/home/krs/Documents/ProjectQuad/Content/tileset1.png","/home/krs/Documents/ProjectQuad/Content/bin/DesktopGL/Content/tileset1.xnb","TextureProcessor","Texture2DContent",11422,256085,0.1216893
+"/home/krs/Documents/ProjectQuad/Content/tileset2.png","/home/krs/Documents/ProjectQuad/Content/bin/DesktopGL/Content/tileset2.xnb","TextureProcessor","Texture2DContent",8899,256085,0.1170499
