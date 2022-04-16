@@ -8,11 +8,11 @@ using Microsoft.Xna.Framework.Graphics;
 namespace Framework.ECS.Components
 {
 	/// <summary>
-    /// Recomends:<br></br>
-    /// Framework.ECS.Components.TransformComponent;<br></br>
-    /// </summary>
-    class DrawableComponent: Base
-    {
+	/// Recomends:<br></br>
+	/// Framework.ECS.Components.TransformComponent;<br></br>
+	/// </summary>
+	class DrawableComponent : Base
+	{
 		public Texture2D texture;
 		public TransformComponent tc = null;
 		public DrawableComponent() { base.Type = typeof(DrawableComponent); }
@@ -30,7 +30,7 @@ namespace Framework.ECS.Components
 			if (Owner.TryGetComponent<TransformComponent>(out tc))
 				_batch.Draw(texture, new Rectangle((int)tc.Pos.X, (int)tc.Pos.Y, (int)size.X, (int)size.Y), Color.White);
 			else
-				_batch.Draw(texture, new Rectangle(0, 0, (int)size.X, (int)size.Y) , Color.White);
+				_batch.Draw(texture, new Rectangle(0, 0, (int)size.X, (int)size.Y), Color.White);
 		}
 	}
 }
