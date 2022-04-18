@@ -1,5 +1,7 @@
-
-* Get Level to parse and render correct tiles
+***[Done] Get Level to parse and render correct tiles
 ***[Done] To check collision between player and map tiles implement "PossibleToMove(map, current position, destination(up, left, down, right))" and then use it in "if (key pressed && PossibleToMove()) move_in_according_direction;"
 ***[Done] Write 2 more versions of NET pathfinder: one that returns list of packed solving positions like so: [x1, y1, x2, y2, x3..](No Vector2i class), second that gonna return bunch of Monogame.Point which is, turns out, exact thing as Vector2i.(This one's will be build especially to use in monogame)
 ***[Done] Replace Vector2i with build-in monogame's Point
+* Fix pathfinder - slow af on the big map.
+* Create some art explaining the lore.
+* Create basic UI carcas, add grid crosshair with indication of the path.(Thought it'll be cool)
