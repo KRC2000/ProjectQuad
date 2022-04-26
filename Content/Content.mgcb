@@ -25,13 +25,6 @@
 /processorParam:TextureFormat=Color
 /build:cell.png
 
-#begin Font1.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Font1.spritefont
-
 #begin character.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -43,6 +36,25 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:character.png
+
+#begin crosshair.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:crosshair.png
+
+#begin Font1.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Font1.spritefont
 
 #begin tileset1.png
 /importer:TextureImporter
@@ -67,3 +79,4 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:tileset2.png
+

@@ -27,7 +27,7 @@ namespace ProjectQuad
 
 
 		uint player;
-
+		uint crosshair;
 
 		private Vector2 MouseWorldPos { get; set; }
 		private Point MouseWorldGridPos { get; set; }
@@ -56,8 +56,11 @@ namespace ProjectQuad
 
 			// Constructing player entity according to the instruction file
 			player = Manager.LoadEntity("Entities/Player.ent");
-
 			Manager.GetComponent<GoToComponent>(player).Locked = true;
+
+			crosshair = Manager.LoadEntity("Entities/Crosshair.ent");
+			Manager.GetComponent<GoToComponent>(crosshair).Speed = 50;
+
 
 #if DEBUG
 #else
@@ -82,6 +85,9 @@ namespace ProjectQuad
 
 			// Load and set player's drawable component's texture
 			Manager.GetComponent<DrawableComponent>(player).texture = Content.Load<Texture2D>("character");
+
+			// Load and set crosshairs drawable component's texture
+			Manager.GetComponent<DrawableComponent>(crosshair).texture = Content.Load<Texture2D>("crosshair");
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -94,12 +100,15 @@ namespace ProjectQuad
 			camera.Update(Keyboard.GetState());
 
 			Manager.GetComponent<GoToComponent>(player).Update();
+			Manager.GetComponent<GoToComponent>(crosshair).Update();
 
 			// Get world mouse position
 			MouseWorldPos = Vector2.Transform(new Vector2(Mouse.GetState().Position.X, Mouse.GetState().Position.Y),
 														Matrix.Invert(camera.GetTransform(GraphicsDevice.Viewport)));
 
 			MouseWorldGridPos = new Point((int)(MouseWorldPos.X / CELLSIZE_X), (int)(MouseWorldPos.Y / CELLSIZE_Y));
+
+			Manager.GetComponent<GoToComponent>(crosshair).GoTo(new Vector2(MouseWorldGridPos.X * CELLSIZE_X, MouseWorldGridPos.Y * CELLSIZE_Y));
 
 			PlayerControl();
 
@@ -120,6 +129,7 @@ namespace ProjectQuad
 			// Draw player entity
 			_spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.GetTransform(GraphicsDevice.Viewport));
 			Manager.GetComponent<DrawableComponent>(player).Draw(_spriteBatch, new Vector2(CELLSIZE_X, CELLSIZE_Y));
+			Manager.GetComponent<DrawableComponent>(crosshair).Draw(_spriteBatch, new Vector2(CELLSIZE_X, CELLSIZE_Y));
 			_spriteBatch.End();
 
 			DebugUI.DrawDebug<float>(_spriteBatch, "Init dist: ", Manager.GetComponent<GoToComponent>(player).InitDistance, 0);
