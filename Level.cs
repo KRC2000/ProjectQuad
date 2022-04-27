@@ -112,7 +112,7 @@ namespace ProjectQuad
 
 										int r_x = (int)(tileValue - tileset.Value.this_ref.FirstElementId) % tileset.Value.Columns;
 										int r_y = (int)(tileValue - tileset.Value.this_ref.FirstElementId) / tileset.Value.Columns;
-										sourceRect = new Rectangle(r_x * tileset.Value.TileWidth, r_y * tileset.Value.TileHeight, tileset.Value.TileWidth, tileset.Value.TileHeight);
+										sourceRect = new Rectangle(1 + (2 * r_x) + r_x * tileset.Value.TileWidth, 1 + (2 * r_y) +r_y * tileset.Value.TileHeight, tileset.Value.TileWidth, tileset.Value.TileHeight);
 									}
 								}
 
