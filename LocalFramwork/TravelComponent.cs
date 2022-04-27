@@ -87,7 +87,7 @@ namespace ProjectQuad.Framework.Components
 			Point pos = new Point((int)((tc.Pos.X + Game1.CELLSIZE_X / 2) / Game1.CELLSIZE_X),
 									(int)((tc.Pos.Y + Game1.CELLSIZE_Y / 2) / Game1.CELLSIZE_Y));
 
-			// if (queue == true) then find a path starting from last position in the queue,
+			// if (queue == true AND there is queu) then find a path starting from last position in the queue,
 			// otherwise find path from the current entity position and clear the queue
 			if (queue && gtc.Queue.Count > 0)
 			{
@@ -96,8 +96,23 @@ namespace ProjectQuad.Framework.Components
 			}
 			else
 			{
-				finder.GetPath(out path, pos, cellPos);
-				if (path != null) gtc.Queue.Clear();
+				// This fixes the issue when new path is ordered when entity already on the way to the next cell, sometimes causing entity to travel diagonaly.
+				if (gtc.isTraveling)
+				{
+					Point targetCellPos = new Point((int)(gtc.Queue[0].X / Game1.CELLSIZE_X), (int)(gtc.Queue[0].Y / Game1.CELLSIZE_Y)); 
+					Vector2 targetPos = gtc.Target;
+					if (finder.GetPath(out path, targetCellPos, cellPos))
+					{
+						gtc.Queue.Clear();
+						gtc.AddToQueue(targetPos);
+					}
+				}
+				else
+				{
+					if (finder.GetPath(out path, pos, cellPos))
+						gtc.Queue.Clear();
+				}
+
 			}
 
 			if (path != null)
