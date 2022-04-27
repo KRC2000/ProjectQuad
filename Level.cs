@@ -106,7 +106,7 @@ namespace ProjectQuad
 								foreach (var tileset in Tilesets)
 								{
 									// if tile value is in the tile range of current tileset -> pick and assign texture used by this tileset
-									if (tileValue > tileset.Value.this_ref.FirstElementId && tileValue < tileset.Value.this_ref.FirstElementId + tileset.Value.TileCount)
+									if (tileValue >= tileset.Value.this_ref.FirstElementId && tileValue < tileset.Value.this_ref.FirstElementId + tileset.Value.TileCount)
 									{
 										stamp_t = tileset.Value.Image.Texture;
 

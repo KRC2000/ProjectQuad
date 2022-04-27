@@ -118,7 +118,7 @@ namespace ProjectQuad
 
 		protected override void Draw(GameTime gameTime)
 		{
-			GraphicsDevice.Clear(Color.CornflowerBlue);
+			GraphicsDevice.Clear(Color.Black);
 
 			//Viewport viewport = new Viewport(0, 0, 200, 200);
 			//GraphicsDevice.Viewport = viewport;
