@@ -96,8 +96,22 @@ namespace ProjectQuad.Framework.Components
 			}
 			else
 			{
-				finder.GetPath(out path, pos, cellPos);
-				if (path != null) gtc.Queue.Clear();
+				if (gtc.isTraveling)
+				{
+					Point targetCellPos = new Point((int)(gtc.Queue[0].X / Game1.CELLSIZE_X), (int)(gtc.Queue[0].Y / Game1.CELLSIZE_Y)); 
+					Vector2 targetPos = gtc.Target;
+					if (finder.GetPath(out path, targetCellPos, cellPos))
+					{
+						gtc.Queue.Clear();
+						gtc.AddToQueue(targetPos);
+					}
+				}
+				else
+				{
+					if (finder.GetPath(out path, pos, cellPos))
+						gtc.Queue.Clear();
+				}
+
 			}
 
 			if (path != null)
