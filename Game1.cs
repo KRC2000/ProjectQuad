@@ -57,6 +57,7 @@ namespace ProjectQuad
 			// Constructing player entity according to the instruction file
 			player = Manager.LoadEntity("Entities/Player.ent");
 			Manager.GetComponent<GoToComponent>(player).Locked = true;
+			Manager.GetComponent<TransformComponent>(player).Move(new Vector2(CELLSIZE_X, CELLSIZE_Y));
 
 			crosshair = Manager.LoadEntity("Entities/Crosshair.ent");
 			Manager.GetComponent<GoToComponent>(crosshair).Speed = 50;
@@ -85,6 +86,7 @@ namespace ProjectQuad
 
 			// Load and set player's drawable component's texture
 			Manager.GetComponent<DrawableComponent>(player).texture = Content.Load<Texture2D>("character");
+			Manager.GetComponent<TravelComponent>(player).texture = Content.Load<Texture2D>("pathstep");
 
 			// Load and set crosshairs drawable component's texture
 			Manager.GetComponent<DrawableComponent>(crosshair).texture = Content.Load<Texture2D>("crosshair");
@@ -129,6 +131,7 @@ namespace ProjectQuad
 			// Draw player entity
 			_spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.GetTransform(GraphicsDevice.Viewport));
 			Manager.GetComponent<DrawableComponent>(player).Draw(_spriteBatch, new Vector2(CELLSIZE_X, CELLSIZE_Y));
+			Manager.GetComponent<TravelComponent>(player).Draw(_spriteBatch, new Vector2(CELLSIZE_X, CELLSIZE_Y));
 			Manager.GetComponent<DrawableComponent>(crosshair).Draw(_spriteBatch, new Vector2(CELLSIZE_X, CELLSIZE_Y));
 			_spriteBatch.End();
 

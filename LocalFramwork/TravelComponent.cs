@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using Framework.ECS;
 using Framework.ECS.Components;
@@ -19,7 +20,7 @@ namespace ProjectQuad.Framework.Components
 		private GoToComponent gtc = null;
 		private TransformComponent tc = null;
 		private Pathfinder finder = null;
-
+		public Texture2D texture { get; set; }
 
 		public TravelComponent() { base.Type = typeof(TravelComponent); }
 
@@ -124,6 +125,19 @@ namespace ProjectQuad.Framework.Components
 			}
 		}
 
+		public void Draw(SpriteBatch batch, Vector2 size)
+		{
+			VerifyRequiredComponents();
+
+			if (gtc.Queue != null && gtc.Queue.Count > 0)
+			{
+                foreach (var step in gtc.Queue)
+                {
+                    batch.Draw(texture, new Rectangle((int)step.X, (int)step.Y, (int)Game1.CELLSIZE_X, (int)Game1.CELLSIZE_Y), Color.White);
+                }
+			}
+		}
+
 		private void VerifyRequiredComponents()
 		{
 			if (tc == null)
@@ -138,6 +152,7 @@ namespace ProjectQuad.Framework.Components
 			}
 		}
 
+		
 		public enum Direction
 		{
 			N, E, S, W,
